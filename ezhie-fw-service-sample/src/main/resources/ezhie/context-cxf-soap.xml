@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+	
+	<http-conf:destination name="{http://contractor.ws.fw.ezhie/}TestSoapServiceImplPort.http-destination">
+		<http-conf:server ReceiveTimeout="180000" />
+	</http-conf:destination>
+	
+	<jaxws:server id="testservice1" address="/test1">
+		<jaxws:serviceBean> 
+			<bean class="ezhie.fw.ws.service.TestSoapServiceImpl" />
+		</jaxws:serviceBean>
+		<jaxws:properties>
+	      <entry key="mtom-enabled" value="true"/>
+	    </jaxws:properties>
+	</jaxws:server>
+	
+	<jaxws:endpoint id="testservice3" implementor="ezhie.fw.ws.service.TestSoapServiceImpl" address="/test3">
+	    <jaxws:properties>
+	    	<entry key="mtom-enabled" value="true"/>
+	    </jaxws:properties>
+	</jaxws:endpoint>
+	
+	<!-- 
+    <int:gateway id="testServiceGateway"
+                 service-interface="com.ezcaretech.rnd.ws.service.TestService"
+                 default-request-channel="requestChannel" default-reply-channel="replyChannel" />
+ 
+    <int:channel id="requestChannel"/>    
+    <int:channel id="replyChannel"/>                                                                            
+ 
+    <int:service-activator input-channel="requestChannel" output-channel="replyChannel">
+    	<bean class="com.ezcaretech.rnd.ws.service.TestServiceImpl" />
+    </int:service-activator>
+
+	<jaxws:endpoint
+            id="testservice2"
+            implementor="#testServiceGateway"
+            address="/test2"
+            serviceName="testService2"/> -->
+	
+</beans>
